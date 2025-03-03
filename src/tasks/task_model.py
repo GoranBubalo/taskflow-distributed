@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, UUID, TEXT, Enum, ForeignKey
+from sqlalchemy import Column, String, DateTime, UUID, TEXT, Enum, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 import uuid, datetime
 from core.enums.task_status import TaskStatus
