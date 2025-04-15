@@ -11,6 +11,9 @@ class TaskRepository:
     def get_tasks_by_user(self, user_id: int):
         return self.db.query(Task).filter(Task.owner_id == user_id).all()
 
+    def get_all_tasks(self):
+        return self.db.query(Task).all()
+
     def create_task(self, task: Task):
         self.db.add(task)
         self.db.commit()
