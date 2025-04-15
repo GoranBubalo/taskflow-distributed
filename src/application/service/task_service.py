@@ -39,7 +39,7 @@ class TaskService:
             description=task_dto.description,
             owner_id=task_dto.owner_id
         )
-        return self.task_repository.add_task(task)
+        return self.task_repository.create_task(task)
 
     def update_task(self, task_id: int, task_dto: TaskUpdateDTO) -> TaskResponseDTO:
         task = self.task_repository.get_task(task_id)

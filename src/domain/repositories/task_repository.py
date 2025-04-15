@@ -31,3 +31,6 @@ class TaskRepository:
             self.db.delete(task)
             self.db.commit()
         return task
+
+    def get_task_by_owner(self, owner_id: int):
+        return self.db.query(Task).filter(Task.owner_id == owner_id).first()
