@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "postgresql://user:password@postgres:5432/taskflow"
+    depends_on:
+      - postgres
+      - redis
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    command: celery -A infrastructure.celery_config.celery_app worker --loglevel=info
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      DATABASE_URL: "postgresql://user:password@postgres:5432/taskflow"
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: "postgres:13"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taskflow
+    ports:
+      - "5432:5432"
