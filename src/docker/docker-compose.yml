@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -16,7 +16,7 @@ services:
   celery_worker:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: Dockerfile
     command: celery -A infrastructure.celery_config.celery_app worker --loglevel=info
     depends_on:
       - redis

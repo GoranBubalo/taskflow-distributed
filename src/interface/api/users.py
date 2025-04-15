@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from src.application.service.task_service import UserService
+from application.service.user_service import UserService
 from application.dto.user_create_dto import UserCreateDTO
 from infrastructure.database.config import get_db
 

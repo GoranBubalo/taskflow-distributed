@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from src.domain.enums.UserStatus import UserStatus
+from domain.enums.UserStatus import UserStatus
 
 class UserUpdateDTO(BaseModel):
     username: str

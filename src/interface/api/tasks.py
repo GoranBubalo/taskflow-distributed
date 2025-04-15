@@ -1,31 +1,45 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from src.application.service.task_service import TaskService
+from application.service.task_service import TaskService
 from application.dto.task_create_dto import TaskCreateDTO
 from application.dto.task_update_dto import TaskUpdateDTO
 from infrastructure.database.config import get_db
+from exceptions import TaskNotFoundError, TaskCreationError, TaskUpdateError
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 @router.post("/")
 def create_task(task_dto: TaskCreateDTO, db: Session = Depends(get_db)):
-    task_service = TaskService(db)
-    return task_service.create_task(task_dto)
+    try:
+        task_service = TaskService(db)
+        return task_service.create_task(task_dto)
+    except TaskCreationError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/{task_id}")
 def get_task(task_id: int, db: Session = Depends(get_db)):
-    task_service = TaskService(db)
-    task = task_service.get_task(task_id)
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return task
+    try:
+        task_service = TaskService(db)
+        return task_service.get_task(task_id)
+    except TaskNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 @router.put("/{task_id}")
 def update_task(task_id: int, task_dto: TaskUpdateDTO, db: Session = Depends(get_db)):
-    task_service = TaskService(db)
-    return task_service.update_task(task_id, task_dto)
+    try:
+        task_service = TaskService(db)
+        return task_service.update_task(task_id, task_dto)
+    except TaskNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except TaskUpdateError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.delete("/{task_id}")
 def delete_task(task_id: int, db: Session = Depends(get_db)):
-    task_service = TaskService(db)
-    return task_service.delete_task(task_id)
+    try:
+        task_service = TaskService(db)
+        return task_service.delete_task(task_id)
+    except TaskNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except TaskUpdateError as e:
+        raise HTTPException(status_code=400, detail=str(e))

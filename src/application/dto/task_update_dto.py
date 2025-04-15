@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from src.domain.enums.TaskStatus import TaskStatus
+from domain.enums.TaskStatus import TaskStatus
 
 class TaskUpdateDTO(BaseModel):
     title: str | None = None
