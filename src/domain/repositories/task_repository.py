@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
-from src.domain.models.task import Task
-
+from domain.models.task import Task
 
 class TaskRepository:
     def __init__(self, db: Session):
