@@ -7,16 +7,17 @@ WORKDIR /app
 # Install PostgreSQL client for pg_isready
 RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
-# Copy dependencies
-COPY src/docker/requirements.txt .
-
-# Install dependencies
-RUN pip install  -r requirements.txt
-
 # Copy the entire src directory into the image
 COPY ../.. .
 
+# Copy dependencies and wait script
+COPY src/docker/requirements.txt .
 COPY src/docker/wait-for-postgres.sh .
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Make wait-for-postgres.sh executable
 RUN chmod +x wait-for-postgres.sh
 
 ENV PYTHONPATH=/app/src
