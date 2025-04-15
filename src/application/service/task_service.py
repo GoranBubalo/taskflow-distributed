@@ -1,12 +1,14 @@
+from sqlalchemy.orm import Session
+from domain.models.task import Task
 from domain.repositories.task_repository import TaskRepository
 from application.dto.task_create_dto import TaskCreateDTO
 from application.dto.task_update_dto import TaskUpdateDTO
 from application.dto.task_response_dto import TaskResponseDTO
-from domain.models.task import Task
-from exceptions import TaskCreationError, TaskNotFoundError, TaskUpdateError, InvalidTaskDataError
+from exceptions import TaskCreationError, TaskNotFoundError, TaskUpdateError
 
 class TaskService:
-    def __init__(self, task_repository: TaskRepository):
+    def __init__(self, db: Session, task_repository: TaskRepository):
+        self.db = db
         self.task_repository = task_repository
 
     def get_task(self, task_id: int) -> TaskResponseDTO:
@@ -19,17 +21,20 @@ class TaskService:
         tasks = self.task_repository.get_tasks_by_user(user_id)
         return [TaskResponseDTO.model_validate(task) for task in tasks]
 
-    def create_task(self, task_dto: TaskCreateDTO, owner_id: int) -> TaskResponseDTO:
-        try:
-            task = Task(
-                title=task_dto.title,
-                description=task_dto.description,
-                owner_id=owner_id,
-            )
-            created_task = self.task_repository.create_task(task)
-            return TaskResponseDTO.model_validate(created_task)
-        except Exception as e:
-            raise TaskCreationError(f"Failed to create task: {str(e)}")
+    def create_task(self, task_dto: TaskCreateDTO):
+        # Check if a task with the same owner already exists
+        existing_task = self.db.query(Task).filter(Task.owner_id == task_dto.owner_id).first()
+        if existing_task:
+            raise TaskCreationError(f"Task for owner_id {task_dto.owner_id} already exists")
+        task = Task(
+            title=task_dto.title,
+            description=task_dto.description,
+            owner_id=task_dto.owner_id
+        )
+        self.db.add(task)
+        self.db.commit()
+        self.db.refresh(task)
+        return task
 
     def update_task(self, task_id: int, task_dto: TaskUpdateDTO) -> TaskResponseDTO:
         task = self.task_repository.get_task(task_id)

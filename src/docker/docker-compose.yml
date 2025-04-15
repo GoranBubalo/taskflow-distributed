@@ -3,8 +3,8 @@ version: "3.8"
 services:
   api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: src/docker/Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -15,9 +15,9 @@ services:
 
   celery_worker:
     build:
-      context: .
-      dockerfile: Dockerfile
-    command: celery -A infrastructure.celery_config.celery_app worker --loglevel=info
+      context: ../..
+      dockerfile: src/docker/Dockerfile
+    command: celery -A src.infrastructure.celery_config.celery_app worker --loglevel=info
     depends_on:
       - redis
       - postgres

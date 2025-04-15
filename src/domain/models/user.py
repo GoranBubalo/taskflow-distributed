@@ -1,9 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum as SQLAlchemyEnum
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from domain.enums.UserStatus import UserStatus
-
-Base = declarative_base()
+from domain.models.base import Base  # Use shared Base
 
 class User(Base):
     __tablename__ = 'users'
