@@ -7,6 +7,8 @@ from application.dto.task_create_dto import TaskCreateDTO
 from application.dto.task_update_dto import TaskUpdateDTO
 from application.dto.task_response_dto import TaskResponseDTO
 from exceptions import TaskCreationError, TaskNotFoundError, TaskUpdateError
+from infrastructure.tasks.task_processor import process_task
+
 
 class TaskService:
     def __init__(self, task_repository: TaskRepository, user_repository: UserRepository):
@@ -40,6 +42,9 @@ class TaskService:
             owner_id=task_dto.owner_id,
             completed = task_dto.status
         )
+        created_task = self.task_repository.create_task(task)
+        # Trigger Celery background processing 
+        process_task.delay(created_task.id)
         return self.task_repository.create_task(task)
 
     def update_task(self, task_id: int, task_dto: TaskUpdateDTO) -> TaskResponseDTO:
