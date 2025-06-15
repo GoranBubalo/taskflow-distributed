@@ -1,78 +1,82 @@
 # TaskFlow Distributed System
 
-## Overview
+## Opis
 
-TaskFlow is a distributed task management system built with FastAPI, SQLAlchemy, Celery, Redis, and PostgreSQL.  
-It uses a clean architecture with separation of concerns: API layer, service layer, and repository layer.
+TaskFlow je distribuirani sustav za upravljanje zadacima, razvijen u Pythonu koristeći FastAPI, SQLAlchemy, Celery, PostgreSQL i Redis.  
+Aplikacija koristi višeslojnu arhitekturu (API, servisni i repozitorijski sloj) te je u potpunosti dockerizirana radi jednostavnog pokretanja i razvoja.
 
 ---
 
-## Prerequisites
+## Preduvjeti
 
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [Docker Compose](https://docs.docker.com/compose/)
 
 ---
 
-## How to Run
+## Pokretanje aplikacije
 
-1. **Clone the repository:**
+1. **Kloniraj repozitorij:**
    ```sh
    git clone https://github.com/your-username/taskflow-distributed.git
-   cd taskflow-distributed
+   cd taskflow-distributed/src/docker
    ```
 
-2. **Build and start the distributed system:**
+2. **Buildaj i pokreni sve servise:**
    ```sh
    docker-compose up --build
    ```
+   Ovo će pokrenuti:
+   - FastAPI API server (na portu 8000)
+   - Celery worker (za obradu zadataka u pozadini)
+   - PostgreSQL bazu podataka (na portu 5432)
+   - Redis (za Celery broker i rezultate, na portu 6379)
 
-   This will start:
-   - FastAPI API server
-   - Celery worker
-   - PostgreSQL database
-   - Redis (for Celery broker/results)
-
-3. **Access the API documentation:**
-   - Open your browser and go to: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-## Useful Endpoints
-
-- `POST /users/` - Create a user
-- `GET /users/` - Get all users
-- `GET /users/{user_id}` - Get a user by ID
-- `PUT /users/{user_id}` - Update a user
-- `DELETE /users/{user_id}` - Delete a user
-
-- `POST /tasks/` - Create a task
-- `GET /tasks/` - Get all tasks
-- `GET /tasks/{task_id}` - Get a task by ID
-- `PUT /tasks/{task_id}` - Update a task
-- `DELETE /tasks/{task_id}` - Delete a task
+3. **Pristupi API dokumentaciji:**
+   - Otvori preglednik i idi na: [http://localhost:8000/docs](http://localhost:8000/docs)
+   - Ovdje možeš isprobati sve dostupne API endpointove.
 
 ---
 
-## Notes
+## Korištenje aplikacije
 
-- All configuration (database, redis, etc.) is handled in `docker-compose.yml`.
-- Swagger UI (`/docs`) shows all available endpoints and models, including enum descriptions for status fields.
+### Korisnički endpointi
+
+- `POST /users/` – Kreiraj korisnika
+- `GET /users/` – Dohvati sve korisnike
+- `GET /users/{user_id}` – Dohvati korisnika po ID-u
+- `PUT /users/{user_id}` – Ažuriraj korisnika
+- `DELETE /users/{user_id}` – Obriši korisnika
+
+### Task endpointi
+
+- `POST /tasks/` – Kreiraj zadatak
+- `GET /tasks/` – Dohvati sve zadatke
+- `GET /tasks/{task_id}` – Dohvati zadatak po ID-u
+- `PUT /tasks/{task_id}` – Ažuriraj zadatak
+- `DELETE /tasks/{task_id}` – Obriši zadatak
 
 ---
 
-## Stopping the System
+## Zaustavljanje sustava
 
-To stop all services, press `CTRL+C` in the terminal where Docker Compose is running, or run:
+Za zaustavljanje svih servisa pritisni `CTRL+C` u terminalu ili pokreni:
 ```sh
 docker-compose down
 ```
 
 ---
 
-## Troubleshooting
+## Napomene
 
-- If you encounter database errors, ensure Docker is running and ports 5432 (Postgres) and 6379 (Redis) are available.
-- For code changes to take effect, restart the containers with `docker-compose up --build`.
+- Svi servisi i konfiguracije definirani su u `src/docker/docker-compose.yml`.
+- Za promjene u kodu, ponovno buildaj i pokreni kontejnere s `docker-compose up --build`.
+- Ako koristiš Windows, provjeri da su svi `.sh` skripte s Unix (LF) line ending-ima.
 
 ---
+
+## Rješavanje problema
+
+- Ako ne možeš pristupiti bazi ili API-ju, provjeri da su Docker i svi potrebni portovi (`8000`, `5432`, `6379`) slobodni.
+- Ako dobiješ grešku vezanu uz `wait-for-postgres.sh`, provjeri da je skripta kopirana u `/app` direktorij u kontejneru i da ima ispravne (LF) line ending-e.
+
