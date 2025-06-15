@@ -37,7 +37,8 @@ class TaskService:
         task = Task(
             title=task_dto.title,
             description=task_dto.description,
-            owner_id=task_dto.owner_id
+            owner_id=task_dto.owner_id,
+            completed = task_dto.status
         )
         return self.task_repository.create_task(task)
 

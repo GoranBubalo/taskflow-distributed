@@ -35,6 +35,9 @@ class UserService:
             user.email = user_dto.email
         if user_dto.is_active is not None:
             user.is_active = user_dto.is_active
+        if user_dto.password:
+            # hash the password before saving (replacewith your hash function if needed)
+            user.hashed_password = bcrypt.hash(user_dto.password)
         return self.user_repository.update_user(user)
 
     def delete_user(self, user_id: int):
