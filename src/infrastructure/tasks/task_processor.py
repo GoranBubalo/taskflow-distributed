@@ -15,9 +15,10 @@ def process_task(task_id: int):
         raise TaskNotFoundError(f"Task with ID {task_id} not found")
 
     try:
-        task.completed = TaskStatus.COMPLETED  # Example: Mark as completed
-        task_repo.update_task(task)
+        pass
     except Exception as e:
         raise WorkerProcessingError(f"Error processing task with ID {task_id}: {str(e)}")
+    finally:
+        db.close()
 
     return f"Task {task_id} processed successfully!"
