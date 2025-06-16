@@ -33,9 +33,7 @@ class TaskService:
         user = self.user_repository.get_user_by_id(task_dto.owner_id)
         if not user:
             raise TaskCreationError(f"User with id {task_dto.owner_id} does not exist")
-        existing_task = self.task_repository.get_task_by_owner(task_dto.owner_id)
-        if existing_task:
-            raise TaskCreationError(f"Task for owner_id {task_dto.owner_id} already exists")
+
         task = Task(
             title=task_dto.title,
             description=task_dto.description,

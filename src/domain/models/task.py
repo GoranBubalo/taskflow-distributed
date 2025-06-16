@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum as SQLAlchemyEnum
+from domain.models.user import User
 from sqlalchemy.orm import relationship
 from domain.enums.TaskStatus import TaskStatus
 from domain.models.base import Base  # <-- Import the shared Base

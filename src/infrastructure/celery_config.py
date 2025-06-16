@@ -9,3 +9,5 @@ celery_app = Celery(
 # Celery configuration
 celery_app.conf.task_routes = {"tasks.*": {"queue": "default"}}
 celery_app.conf.update(task_serializer="json", result_serializer="json")
+
+import infrastructure.tasks.task_processor
