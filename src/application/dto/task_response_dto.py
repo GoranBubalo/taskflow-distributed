@@ -6,7 +6,7 @@ class TaskResponseDTO(BaseModel):
     id: int
     title: str
     description: str
-    completed: TaskStatus
+    status: TaskStatus
     owner_id: int
 
     model_config = ConfigDict(from_attributes=True)

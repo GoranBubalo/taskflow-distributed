@@ -38,7 +38,7 @@ class TaskService:
             title=task_dto.title,
             description=task_dto.description,
             owner_id=task_dto.owner_id,
-            completed = task_dto.status
+            status = task_dto.status
         )
         created_task = self.task_repository.create_task(task)
         # Trigger Celery background processing 

@@ -10,6 +10,6 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True, nullable=False)
     description = Column(String, index=True)
-    completed = Column(SQLAlchemyEnum(TaskStatus), default=TaskStatus.PENDING)
+    status = Column(SQLAlchemyEnum(TaskStatus), default=TaskStatus.PENDING)
     owner_id = Column(Integer, ForeignKey('users.id'))
     owner = relationship('User', back_populates='tasks')
