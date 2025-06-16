@@ -54,8 +54,8 @@ class TaskService:
                 task.title = task_dto.title
             if task_dto.description:
                 task.description = task_dto.description
-            if task_dto.completed:
-                task.completed = task_dto.completed
+            if task_dto.status:
+                task.status = task_dto.status
             updated_task = self.task_repository.update_task(task)
             return TaskResponseDTO.model_validate(updated_task)
         except Exception as e:
